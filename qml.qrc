@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>chess_pieces.png</file>
+        <file>chess_pieces_1.png</file>
+        <file>main.qml</file>
+        <file>ChessCell.qml</file>
+        <file>ChessCellsModel.qml</file>
+        <file>ChessBoard.qml</file>
+        <file>ChessBoardGridView.qml</file>
+    </qresource>
+</RCC>

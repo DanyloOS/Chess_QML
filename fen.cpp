@@ -29,9 +29,9 @@ void FEN::fromFENtoQList(const std::string &FENpos, QList <ChessPiece> &curPiece
         }
         else if (isalpha(curChar))
         {
-            curColor = static_cast <PieceColor_e>(isupper(curChar));
+            curColor = isupper(curChar) ? PieceColor_e::White : PieceColor_e::Black;
             curType = charToPieceType.at(tolower(curChar));
-            curPiecesList << ChessPiece({curType, curColor, {curCoordX, 7 - curCoordY}});
+            curPiecesList << ChessPiece({curType, curColor, {curCoordX, curCoordY}});
             curCoordX = (curCoordX + 1) %  8;
         }
         else if (curChar == '/')

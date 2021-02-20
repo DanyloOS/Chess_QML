@@ -13,7 +13,6 @@ void ChessPieceModel::addPiece(const ChessPiece &piece)
     endInsertRows();
 }
 
-// XXX: Does we need it?
 int ChessPieceModel::rowCount(const QModelIndex &parent) const {
     Q_UNUSED(parent);
     return m_pieces.count();

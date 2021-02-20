@@ -27,6 +27,7 @@ Image {
     MouseArea {
         id: dragArea
         anchors.fill: parent
+        anchors.margins: parent.width * 0.2
         drag.target: parent
     }
 }

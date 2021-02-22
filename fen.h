@@ -2,19 +2,19 @@
 #define FEN_H
 
 
-#include "chesspiece.h"
-
-#include <QList>
-#include <string.h>
+#include <QtCore>
+#include <string>
 #include <map>
+
+#include "chessboard.h"
 
 
 class FEN
 {
 public:
     virtual ~FEN() = 0;
-    static void fromFENtoQList (const std::string &FENpos, QList<ChessPiece> &curPiecesList);
-    static void fromQListToFEN (const QList<ChessPiece> &curPiecesList, std::string FENpos);
+    static ChessBoard fromFENToBoard(const std::string &FENpos);
+    static void fromBoardToFEN (const ChessBoard &curPiecesBoard, std::string &FENpos);
 
 private:
     static const std::map <char, PieceType_e> charToPieceType;

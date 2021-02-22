@@ -2,38 +2,34 @@
 #define CHESSBOARDMODEL_H
 
 
-#include <QAbstractListModel>
-#include <QStringList>
+#include <QAbstractTableModel>
+
+#include "chessboard.h"
 
 
-class Cell
-{
-public:
-    Cell(int color);
-    qint32 getColor() const;
+#define CHESSBOARD_ROLE_OFFSET 100
 
-private:
-    qint32 _color;
-};
 
-class ChessBoardModel : public QAbstractListModel
+class ChessBoardModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
     enum ChessBoardRoles {
-        CellColorRole = Qt::UserRole + 1
+        CellColorRole = Qt::UserRole + CHESSBOARD_ROLE_OFFSET,
+        PieceTypeRole,
+        PieceColorRole
     };
 
-    ChessBoardModel(QObject *parent = 0);
-    void addCell(const Cell &cell);
-    int rowCount(const QModelIndex & parent = QModelIndex()) const;
-    QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
+    ChessBoardModel(ChessBoard board, QObject *parent = 0);
+    int rowCount(const QModelIndex & parent = QModelIndex()) const override;
+    int columnCount(const QModelIndex & parent = QModelIndex()) const override;
+    QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const override;
 
 protected:
-    QHash <int, QByteArray> roleNames() const;
+    QHash <int, QByteArray> roleNames() const override;
 
 private:
-    QList <Cell> m_cells;
+    ChessBoard m_board;
 };
 
 #endif // CHESSBOARDMODEL_H

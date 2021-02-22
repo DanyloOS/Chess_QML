@@ -3,7 +3,8 @@
 
 
 enum class PieceType_e {
-    King = 0,
+    None = -1,
+    King,
     Queen,
     Bishop,
     Knight,
@@ -12,29 +13,24 @@ enum class PieceType_e {
 };
 
 enum class PieceColor_e {
-    White = 0,
+    None = -1,
+    White,
     Black
 };
 
-struct Coordinates {
-    unsigned x;
-    unsigned y;
-};
 
 class ChessPiece
 {
 public:
-    ChessPiece(PieceType_e pieceType, PieceColor_e pieceColor,
-        Coordinates pieceCoordinates);
-    PieceType_e getType() const;
-    PieceColor_e getColor() const;
-    unsigned getCoordX() const;
-    unsigned getCoordY() const;
+    ChessPiece(PieceType_e pieceType = PieceType_e::None,
+               PieceColor_e pieceColor = PieceColor_e::None);
+
+    PieceType_e type() const;
+    PieceColor_e color() const;
 
 private:
-    PieceType_e type;
-    PieceColor_e color;
-    Coordinates coordinates;
+    PieceType_e m_type;
+    PieceColor_e m_color;
 };
 
 #endif // CHESSPIECE_H

@@ -1,25 +1,15 @@
 #include "chesspiece.h"
 
-ChessPiece::ChessPiece(PieceType_e pieceType, PieceColor_e pieceColor, Coordinates pieceCoordinates)
-    : type(pieceType), color(pieceColor), coordinates(pieceCoordinates)
+ChessPiece::ChessPiece(PieceType_e pieceType, PieceColor_e pieceColor)
+    : m_type(pieceType), m_color(pieceColor)
 {}
 
-PieceType_e ChessPiece::getType() const
+PieceType_e ChessPiece::type() const
 {
-    return type;
+    return m_type;
 }
 
-PieceColor_e ChessPiece::getColor() const
+PieceColor_e ChessPiece::color() const
 {
-    return color;
-}
-
-unsigned ChessPiece::getCoordX() const
-{
-    return coordinates.x;
-}
-
-unsigned ChessPiece::getCoordY() const
-{
-    return coordinates.y;
+    return m_color;
 }

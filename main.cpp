@@ -5,8 +5,6 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 
-// TODO: find better place for this
-#define FEN_START_POS "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
 
 int main(int argc, char *argv[])
 {
@@ -25,9 +23,7 @@ int main(int argc, char *argv[])
     }, Qt::QueuedConnection);
 
     GameEngine gameEngine;
-    gameEngine.setUpStartPos(FEN_START_POS);
     engine.rootContext()->setContextProperty("chessBoardModel", &(gameEngine.getChessBoardModel()));
-    engine.rootContext()->setContextProperty("chessPieceModel", &(gameEngine.getChessPieceModel()));
     engine.load(url);
 
     return app.exec();

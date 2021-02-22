@@ -9,14 +9,13 @@ const std::map <char, PieceType_e> FEN::charToPieceType {
     {'p', PieceType_e::Pawn}
 };
 
-void FEN::fromFENtoQList(const std::string &FENpos, QList <ChessPiece> &curPiecesList)
+ChessBoard FEN::fromFENToBoard(const std::string &FENpos)
 {
     unsigned curCoordX = 0;
     unsigned curCoordY = 0;
     PieceColor_e curColor;
     PieceType_e curType;
-
-    curPiecesList.clear();
+    ChessBoard pieceBoard;
 
     for (char curChar : FENpos)
     {
@@ -31,7 +30,8 @@ void FEN::fromFENtoQList(const std::string &FENpos, QList <ChessPiece> &curPiece
         {
             curColor = isupper(curChar) ? PieceColor_e::White : PieceColor_e::Black;
             curType = charToPieceType.at(tolower(curChar));
-            curPiecesList << ChessPiece({curType, curColor, {curCoordX, curCoordY}});
+//            curPiecesList << ChessPiece({curType, curColor, {curCoordX, curCoordY}});
+            pieceBoard[curCoordY][curCoordX].setPiece({curType, curColor});
             curCoordX = (curCoordX + 1) %  8;
         }
         else if (curChar == '/')
@@ -44,11 +44,13 @@ void FEN::fromFENtoQList(const std::string &FENpos, QList <ChessPiece> &curPiece
             // TODO: throw BadFENpos exception
         }
     }
+
+    return pieceBoard;
 }
 
-void FEN::fromQListToFEN(const QList <ChessPiece> &curPiecesList, std::string fenPos)
+void FEN::fromBoardToFEN(const ChessBoard &curPieceBoard, std::string &fenPos)
 {
 // TODO: implement converting QList <ChessPiece> to FEN
-    Q_UNUSED(curPiecesList);
+    Q_UNUSED(curPieceBoard);
     Q_UNUSED(fenPos);
 }

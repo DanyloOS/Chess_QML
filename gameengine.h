@@ -3,23 +3,23 @@
 
 
 #include "chessboardmodel.h"
-#include "chesspiecemodel.h"
 #include "fen.h"
 
 #include <string>
 
 
+#define CHESS_DEFAULT_FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+
+
 class GameEngine
 {
 public:
-    GameEngine();
+    GameEngine(const std::string &start_chess_fen_pos = CHESS_DEFAULT_FEN);
     void setUpStartPos(const std::string& FEN_pos);
     ChessBoardModel& getChessBoardModel();
-    ChessPieceModel& getChessPieceModel();
 
 private:
     ChessBoardModel chessBoardModel;
-    ChessPieceModel chessPieceModel;
 };
 
 #endif // GAMEENGINE_H

@@ -3,18 +3,25 @@ import QtQuick.Layouts 1.3
 
 Rectangle {
     id: _board
+//    z: -1
 
     property int boardSize: width > height ? height : width
     property int cellSize: boardSize / 8
     property bool isRotated: false
 
-    ListView {
+    GridView {
         id: _cells
-        model: chessBoardModel //parent.columns * parent.rows
-        anchors.fill: parent
+//        z:30
+        interactive: false
+        width: boardSize
+        height: boardSize
+        cellWidth: cellSize
+        cellHeight: cellSize
+        model: chessBoardModel // parent.columns * parent.rows
         delegate: Rectangle {
-//            x: cellSize * 1
-//            y: cellSize * 1
+//            x: cellSize * (index % 8)
+//            y: cellSize * parseInt(index / 8)
+//            z:100
             width: cellSize
             height: cellSize
             color: cellColor ? "#8b4513" : "#ffdead" //parseInt(index + index / 8) % 2  ? "#8b4513" : "#ffdead"
@@ -28,18 +35,79 @@ Rectangle {
         id: _pieces
         model: chessBoardModel
         delegate:  ChessPiece {
+            id: _piece
             required property int pieceType
             required property int pieceColor
-//            required property int pieceCoordX
-//            required property int pieceCoordY
+            required property int pieceCoordX
+            required property int pieceCoordY
 
-            width: pieceType !== -1 ? cellSize : 0
-            height: pieceType !== -1 ? cellSize : 0
-//            x: cellSize * pieceCoordX
-//            y: cellSize * (isRotated ? 7 - pieceCoordY : pieceCoordY)
+            width: cellSize
+            height: cellSize
+            x: cellSize * pieceCoordX
+            y: cellSize * (isRotated ? 7 - pieceCoordY : pieceCoordY)
+            z: pieceType === -1 ? -1 : 1
+
+//            Component.onCompleted: {
+////                        console.warn("warn completed")
+////                        console.log("log completed")
+////                        console.error("error completed")
+////                        console.debug("debug completed")
+////                        console.exception("exception completed")
+////                        console.info("info completed")
+//                    }
 
             source: "chess_pieces.png"
             sourceClipRect: Qt.rect(200 * pieceType, pieceColor * 200, 200, 200)
+
+            Drag.active: _mouseArea.drag.active
+
+            MouseArea {
+                id: _mouseArea
+                anchors.fill: parent
+                anchors.margins: parent.width * 0.2
+                drag.target: parent
+//                visible: false
+
+                onPressed: {
+                    _piece.z++
+                    _mouseAreaRect.visible = (pieceType === -1) ? false : true
+                    _mouseAreaRect.opacityCoef = 0.8
+                    console.log("cellSize:", cellSize,
+                                "x:", _piece.x,
+                                "xc:", _piece.x + _piece.width / 2,
+                                "y:", _piece.y,
+                                "yc:", _piece.y + _piece.width / 2,
+                                "pieceType:", pieceType);
+                }
+
+                onReleased: {
+                    _piece.z--
+                    _mouseAreaRect.opacityCoef = 0.5
+                    var xCenter = _piece.x + cellSize / 2
+                    var yCenter = _piece.y + cellSize / 2
+                    _piece.x = cellSize * parseInt(xCenter / cellSize)
+                    _piece.y = cellSize * parseInt(yCenter / cellSize)
+                    console.log("cellSize:", cellSize,
+                                "x:", _piece.x,
+                                "xc:", xCenter,
+                                "y:", _piece.y,
+                                "yc:", yCenter,
+                                "pieceType:", pieceType);
+                }
+                Rectangle {
+                    id: _mouseAreaRect
+                    property real opacityCoef: 0.5
+                    color: "darkblue"
+                    anchors.fill: parent
+                    width: cellSize
+                    height: cellSize
+                    opacity: opacityCoef
+                    radius: width / 2
+                    visible: false
+                }
+
+
+            }
         }
     }
 }

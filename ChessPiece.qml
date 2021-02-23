@@ -22,12 +22,4 @@ Image {
 
 //    source: "chess_pieces.png"
 //    sourceClipRect: Qt.rect(200 * pieceType, pieceColor * 200, 200, 200)
-    Drag.active: dragArea.drag.active
-
-    MouseArea {
-        id: dragArea
-        anchors.fill: parent
-        anchors.margins: parent.width * 0.2
-        drag.target: parent
-    }
 }

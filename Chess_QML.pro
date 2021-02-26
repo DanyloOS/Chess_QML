@@ -33,3 +33,7 @@ HEADERS += \
     chesspiece.h \
     fen.h \
     gameengine.h
+
+DISTFILES += \
+    MyNewModel.qml
+

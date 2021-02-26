@@ -4,5 +4,9 @@
         <file>main.qml</file>
         <file>ChessPiece.qml</file>
         <file>GameBoard.qml</file>
+        <file>ChessBoard.qml</file>
+        <file>ChessNumCoordinates.qml</file>
+        <file>ChessAlphaCoordinates.qml</file>
+        <file>ChessCoordinatesRect.qml</file>
     </qresource>
 </RCC>

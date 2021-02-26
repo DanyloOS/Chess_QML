@@ -1,8 +1,11 @@
 import QtQuick 2.15
 
 Image {
+    property bool isCoordinatesInverted: false
     property int coordX: 0
     property int coordY: 0
+    readonly property int _coordX: isCoordinatesInverted ? 7 - coordX: coordX
+    readonly property int _coordY: isCoordinatesInverted ? 7 - coordY: coordY
     property int pieceType: 0
     property bool pieceColor: ChessPiece.PieceColor_e.Black
 

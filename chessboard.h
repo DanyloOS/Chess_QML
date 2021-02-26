@@ -42,6 +42,7 @@ public:
 
     std::vector <Cell>& operator[](std::size_t index);
     const Cell &operator [](std::size_t index) const;
+    Cell& at(std::size_t y, std::size_t x);
     const Cell& at(std::size_t y, std::size_t x) const;
 
 private:

@@ -47,6 +47,16 @@ QVariant ChessBoardModel::data(const QModelIndex & index, int role) const {
     }
 }
 
+void ChessBoardModel::movePiece(int oldY, int oldX, int newY, int newX)
+{
+    if (std::make_pair(oldY, oldX) != std::make_pair(newY, newX))// && (rand() % 2))
+    {
+        m_board.at(newY, newX).setPiece(m_board.at(oldY, oldX).piece());
+        m_board.at(oldY, oldX).setPiece(ChessPiece());
+        endResetModel();
+    }
+}
+
 QHash<int, QByteArray> ChessBoardModel::roleNames() const {
     QHash <int, QByteArray> roles;
     roles[CellColorRole] = "cellColor";

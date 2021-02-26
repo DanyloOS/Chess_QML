@@ -26,6 +26,8 @@ public:
     int rowCount(const QModelIndex & parent = QModelIndex()) const override;
     QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const override;
 
+    Q_INVOKABLE void movePiece(int oldY, int oldX, int newY, int newX);
+
 protected:
     QHash <int, QByteArray> roleNames() const override;
 

@@ -56,6 +56,11 @@ std::vector <Cell>& ChessBoard::operator[](std::size_t index)
     return m_board[index];
 }
 
+Cell &ChessBoard::at(std::size_t y, std::size_t x)
+{
+    return m_board[y][x];
+}
+
 const Cell &ChessBoard::at(std::size_t y, std::size_t x) const
 {
     return m_board[y][x];

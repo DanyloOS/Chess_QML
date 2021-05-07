@@ -13,11 +13,12 @@ class FEN
 {
 public:
     virtual ~FEN() = 0;
-    static ChessBoard fromFENToBoard(const std::string &FENpos);
-    static void fromBoardToFEN (const ChessBoard &curPiecesBoard, std::string &FENpos);
+    static ChessBoard fromFENToBoard(const QString &FENpos);
+    static QString fromBoardToFEN(const ChessBoard &curPiecesBoard);
 
 private:
-    static const std::map <char, PieceType_e> charToPieceType;
+    static const QMap <QChar, PieceType_e> charToPieceType;
+    static const QMap <PieceType_e, QChar> pieceTypeToChar;
 };
 
 #endif // FEN_H

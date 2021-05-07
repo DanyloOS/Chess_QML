@@ -5,12 +5,15 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 
+void TestFEN();
 
 int main(int argc, char *argv[])
 {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
+
+//    TestFEN();
 
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
@@ -27,4 +30,11 @@ int main(int argc, char *argv[])
     engine.load(url);
 
     return app.exec();
+}
+
+void TestFEN()
+{
+    QString res = FEN::fromBoardToFEN(FEN::fromFENToBoard(CHESS_DEFAULT_FEN));
+    qDebug("%s\n%s", CHESS_DEFAULT_FEN, res.toStdString().c_str());
+    getchar();
 }

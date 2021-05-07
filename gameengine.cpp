@@ -1,9 +1,8 @@
 #include "gameengine.h"
 
-GameEngine::GameEngine(const std::string &start_pos)
+GameEngine::GameEngine(const QString &start_pos)
     : chessBoardModel(FEN::fromFENToBoard(start_pos))
-{
-}
+{}
 
 ChessBoardModel& GameEngine::getChessBoardModel()
 {

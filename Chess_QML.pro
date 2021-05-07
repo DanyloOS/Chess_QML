@@ -12,7 +12,8 @@ SOURCES += \
         chesspiece.cpp \
         fen.cpp \
         gameengine.cpp \
-        main.cpp
+        main.cpp \
+        uciengine.cpp
 
 RESOURCES += qml.qrc
 
@@ -32,7 +33,8 @@ HEADERS += \
     chessboardmodel.h \
     chesspiece.h \
     fen.h \
-    gameengine.h
+    gameengine.h \
+    uciengine.h
 
 DISTFILES += \
     MyNewModel.qml

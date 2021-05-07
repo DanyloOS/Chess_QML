@@ -1,11 +1,9 @@
 #ifndef CHESSBOARD_H
 #define CHESSBOARD_H
 
-
 #include <vector>
 
 #include "chesspiece.h"
-
 
 enum class CellColor_e {
     Black = 0,

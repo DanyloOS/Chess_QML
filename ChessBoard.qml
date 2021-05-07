@@ -74,7 +74,7 @@ Rectangle {
                 onPressed: {
                     _piece.z++
                     _mouseAreaRect.visible = (pieceType === -1) ? false : true
-                    _mouseAreaRect.opacityCoef = 0.8
+                    _mouseAreaRect.opacityCoef = 0.5
                     console.log("cellSize:", cellSize,
                                 "x:", _piece.x,
                                 "xc:", _piece.x + _piece.width / 2,
@@ -104,7 +104,7 @@ Rectangle {
                                 "pieceCoordX", pieceCoordX,
                                 "_piece._coordY", _piece._coordY,
                                 "_piece._coordX", _piece._coordX)
-                    chessBoardModel.movePiece(pieceCoordY, pieceCoordX,
+                    chessBoardModel.playerMakesMove(pieceCoordY, pieceCoordX,
                                               _piece.coordY, _piece.coordX)
 
                 }
@@ -119,7 +119,6 @@ Rectangle {
                     radius: width / 2
                     visible: false
                 }
-
 
             }
         }

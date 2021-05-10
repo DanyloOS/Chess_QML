@@ -9,13 +9,19 @@
 class UciEngine : public QObject {
     Q_OBJECT
 public:
+    enum class UciEngineState {
+        None,
+        LookingForLegalMoves,
+        LookingForTheBestMove
+    };
+
     UciEngine(QObject *parent = 0)
-        : QObject(parent)
+        : QObject(parent), m_buffer(&_m_buffer)
     {
         m_uciEngine = new QProcess(this);
         m_uciEngine->setProcessChannelMode(QProcess::MergedChannels);
         connect(m_uciEngine, &QIODevice::readyRead, this, &UciEngine::readFromEngine);
-        connect(this, &UciEngine::messageReceived, this, &UciEngine::printMessage);
+        connect(this, &UciEngine::messageReceived, this, &UciEngine::parseMessage);
     }
 
     ~UciEngine()
@@ -25,50 +31,115 @@ public:
 public slots:
     void startEngine(const QString &enginePath, QStringList argList = QStringList())
     {
-        m_uciEngine->start(enginePath, argList);//{"uci", "isready"}));
+        m_uciEngine->start(enginePath, argList);
+//        sendCommand("uci\nucinewgame\nisready\n");
+//        sendCommand("isready\n");
     }
 
     void sendCommand(const QString &command)
     {
-        qDebug()<<"sendCommand() command = " << command;
-        /*qDebug("%lld", */m_uciEngine->write(command.toLatin1());
+//        qDebug()<<"sendCommand() command = " << command;
+        m_uciEngine->write(command.toLatin1());
     }
 
-    void findMove(const QString historyMoves)
+    void findMove(const QString previousMoves)
     {
-        sendCommand("position startpos moves " + historyMoves + "\n");
-        sendCommand("go\n");
+        isLookingForTheBestMove = true;
+        sendCommand("position startpos moves " + previousMoves + "\ngo depth 12\n");
+        QThread::msleep(300);
+//        sendCommand("stop\n");
+//        QThread::msleep(100);
+    }
+
+    void findLegalMoves(const QString previousMoves)
+    {
+        isLookingForLegalMoves = true;
+        sendCommand("position startpos moves " + previousMoves + "\ngo perft 1\n");
     }
 
 private slots:
     void readFromEngine()
     {
-        while (m_uciEngine->canReadLine())
+        QString legalMoves;
+
+        if (isInitializing)
         {
-            QString line = QString::fromLatin1(m_uciEngine->readLine());
-            emit messageReceived(line);
-            if (line.split(" ").size() >= 2)
-                if(line.split(" ").at(0) == "bestmove")
-                    emit bestMoveFound(line.split(" ").at(1));
+            while (m_uciEngine->canReadLine())
+                m_uciEngine->readAll();
+            isInitializing = false;
+        }
+        else if (isLookingForLegalMoves)
+        {
+            bool inProcess = true;
+            while (m_uciEngine->canReadLine() && isLookingForLegalMoves)
+            {
+                QString line = QString::fromLatin1(m_uciEngine->readLine());
+//                qDebug() << line;
+//                m_buffer << line;
+
+                if (line.startsWith("Nodes searched")) inProcess = false;
+                else  if (line != "\n") m_buffer << line;
+                if (line == "\n" && !inProcess)
+                {
+                    isLookingForLegalMoves = false;
+                    emit messageReceived(UciEngineState::LookingForLegalMoves);
+                }
+            }
+        }
+        else if (isLookingForTheBestMove)
+        {
+            while (m_uciEngine->canReadLine() && isLookingForTheBestMove)
+            {
+                QString line = QString::fromLatin1(m_uciEngine->readLine());
+//                qDebug() << line;
+                if (line.startsWith("bestmove"))
+                {
+                    isLookingForTheBestMove = false;
+                    m_buffer << line;
+                    emit messageReceived(UciEngineState::LookingForTheBestMove);
+                }
+            }
         }
     }
 
-    void printMessage(QString message)
+    void parseMessage(enum UciEngineState state)
     {
-        qDebug("%s", message.toLocal8Bit().data());
-//        if (counter++ < 3)
-//        {
-//            sendCommand(QString::number(counter) + " iteration\n");
-//        }
+//        qDebug() << "parseMessage begin:\n" << m_buffer.readAll() << "parseMessageEnd\n";
+        m_buffer.seek(0);
+        switch (state) {
+        case UciEngineState::LookingForLegalMoves:
+        {
+            QString move;
+            while (!m_buffer.atEnd())
+                move += m_buffer.readLine().split(":").at(0) + " ";
+            emit legalMovesFound(move);
+            break;
+        }
+        case UciEngineState::LookingForTheBestMove:
+        {
+            emit bestMoveFound(m_buffer.readLine().split(" ").at(1));
+            break;
+        }
+        default: break;
+        }
+//        m_buffer.flush();
+        _m_buffer.clear();
+//        qDebug() << "parseMessage end: " << m_buffer.readLine();
     }
 
 
 signals:
-    void messageReceived(QString);
+    void messageReceived(enum UciEngineState);
     void bestMoveFound(QString);
+    void legalMovesFound(QString);
+
 private:
     QProcess *m_uciEngine;
-
+    QString _m_buffer;
+    QTextStream m_buffer;
+    bool isLookingForLegalMoves = false;
+    bool isLookingForTheBestMove = false;
+    bool isInitializing = true;
     int counter = 0;
 };
 

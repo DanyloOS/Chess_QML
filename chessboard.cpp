@@ -71,3 +71,12 @@ const Cell& ChessBoard::operator[](std::size_t index) const
     return m_board[index / rowCount()][index % columnCount()];
 }
 
+ChessBoard::Board::const_iterator ChessBoard::begin() const
+{
+    return m_board.begin();
+}
+
+ChessBoard::Board::const_iterator ChessBoard::end() const
+{
+    return m_board.end();
+}

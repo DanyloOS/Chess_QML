@@ -12,6 +12,7 @@
 class ChessBoardModel : public QAbstractListModel
 {
     Q_OBJECT
+    Q_PROPERTY(PieceColor_e winner MEMBER m_winner NOTIFY winnerChanged)
 public:
     enum ChessBoardRoles {
         CellColorRole = Qt::UserRole + CHESSBOARD_ROLE_OFFSET,
@@ -20,6 +21,15 @@ public:
         PieceCoordXRole,
         PieceCoordYRole
     };
+
+    enum class TypeOfMove
+    {
+        DefaultMove,
+        Castling,
+        EnPassant,
+        Promotion,
+    };
+
 
     ChessBoardModel(ChessBoard board, QObject *parent = 0);
     int rowCount(const QModelIndex & parent = QModelIndex()) const override;
@@ -34,18 +44,31 @@ private:
     PieceColor_e m_currentPlayer;
     UciEngine m_engine;
     QString m_movesHistory;
+    QList <QString> m_legalMoves;
+    QList <ChessPiece> m_piecesOnBoard;
+    PieceColor_e m_winner = PieceColor_e::None;
 
 private slots:
     void applyMove(QString move);
     void toggleCurrentPlayer();
     void askForMove();
     const Cell &cell(int index) const;
+    bool isMoveLegal(QString move);
+    void findLegalMoves();
+    void saveLegalMoves(const QString &legalMoves);
+    void processGameOver(PieceColor_e);
+    TypeOfMove typeOfMove(QString move);
+    void updatePiecesOnBoard();
 
 signals:
+    void initiateGame();
     void readyToMove(QString);
     void moveApplied();
     void whiteToMove();
     void blackToMove();
+    void gameOver(PieceColor_e);
+    void piecesChanged();
+    void winnerChanged(PieceColor_e);
 };
 
 #endif // CHESSBOARDMODEL_H

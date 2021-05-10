@@ -13,3 +13,17 @@ PieceColor_e ChessPiece::color() const
 {
     return m_color;
 }
+
+QString ChessPiece::typeToStr(PieceType_e type)
+{
+    static const QMap <PieceType_e, QString> ptostr {
+        {PieceType_e::King, "k"},
+        {PieceType_e::Queen, "q"},
+        {PieceType_e::Bishop, "b"},
+        {PieceType_e::Knight, "n"},
+        {PieceType_e::Rock, "r"},
+        {PieceType_e::Pawn, "p"}
+    };
+
+    return ptostr[type];
+}

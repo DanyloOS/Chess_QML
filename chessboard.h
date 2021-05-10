@@ -42,6 +42,8 @@ public:
     const Cell &operator [](std::size_t index) const;
     Cell& at(std::size_t y, std::size_t x);
     const Cell& at(std::size_t y, std::size_t x) const;
+    Board::const_iterator begin() const;
+    Board::const_iterator end() const;
 
 private:
     Board m_board;

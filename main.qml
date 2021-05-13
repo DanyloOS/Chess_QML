@@ -36,7 +36,7 @@ Window {
         }
 
         Rectangle {
-            color: "lightsalmon"
+            color: "black"
             opacity: 0.8
             width:  gameBoard.boardSize * 0.5
             height: width * 0.5
@@ -45,18 +45,19 @@ Window {
 
             Column {
                 anchors.fill: parent
-                spacing: height * 0.1
+//                spacing: height * 0.1
                 Rectangle {
                     width: parent.width
-                    height: parent.height * 0.4
-                    anchors.topMargin: parent.height * 0.05
+                    height: parent.height * 0.50
+//                    anchors.topMargin: parent.height * 0.05
                     color: "transparent"
                     Text {
                         id: resultText
                         property int playerInt: 0
                         anchors.centerIn: parent
                         font.family: "ComicSans"
-                        font.pointSize: parent.width / 20
+                        font.pointSize: parent.width / 15
+                        color: "white"
                         text: {
                             var player = (playerInt === 1) ? "White" : "Black"
                             if (playerInt === -1) return "Draw"
@@ -68,7 +69,7 @@ Window {
                 RoundButton {
                     width: parent.width * 0.8
                     height: parent.height * 0.4
-                    anchors.bottomMargin: parent.height * 0.05
+                    anchors.bottomMargin: parent.height * 0.1
                     anchors.horizontalCenter: parent.horizontalCenter
                     radius: 20
                     font.family: "ComicSans"
@@ -85,8 +86,6 @@ Window {
             Connections {
                 target: chessBoardModel
                 function onWinnerChanged(pieceColor) {
-                    console.log("Hello from here")
-                    console.log(pieceColor)
                     resultText.playerInt = pieceColor
                     resultPage.visible = true
                 }

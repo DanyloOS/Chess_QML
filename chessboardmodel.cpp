@@ -16,7 +16,7 @@ ChessBoardModel::ChessBoardModel(ChessBoard board, QObject *parent)
     connect(this, &ChessBoardModel::moveApplied, this, &ChessBoardModel::toggleCurrentPlayer);
     connect(this, &ChessBoardModel::moveApplied, this, &ChessBoardModel::updatePiecesOnBoard);
     connect(this, &ChessBoardModel::blackToMove, this, &ChessBoardModel::askForMove);
-    connect(this, &ChessBoardModel::whiteToMove, this, &ChessBoardModel::askForMove);
+//    connect(this, &ChessBoardModel::whiteToMove, this, &ChessBoardModel::askForMove);
     connect(&m_engine, &UciEngine::bestMoveFound, this, &ChessBoardModel::applyMove);
     connect(&m_engine, &UciEngine::legalMovesFound, this, &ChessBoardModel::saveLegalMoves);
     connect(this, &ChessBoardModel::gameOver, this, &ChessBoardModel::processGameOver);
@@ -214,11 +214,11 @@ void ChessBoardModel::processGameOver(PieceColor_e p)
         result = "DRAW";
     else
         result = QString("PLAYER ") + (p != PieceColor_e::Black ? "Black" : "White") + " WINS";
-    qDebug("%s %s %s", "___________________________________\n"
+    qDebug("%s %s %s", "______________________________________\n"
                 "\t\tGAME OVER\n"
                 "\t", result.toStdString().c_str(),
-                " WINS\n"
-                "___________________________________");
+                "\n"
+                "______________________________________");
 
     disconnect(&m_engine, &UciEngine::legalMovesFound, this, &ChessBoardModel::saveLegalMoves);
     m_legalMoves.clear();

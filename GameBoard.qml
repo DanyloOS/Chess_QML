@@ -8,7 +8,7 @@ Rectangle {
     property int _cellCoordinatesMargins: _cellCoordinatesSize * 2
     property int _chessBoardSize: _rectChessBoard.width
     property int _chessCellSize: _chessBoardSize / 8
-    property bool isBoardInverted: true
+    property bool isBoardInverted: false
     z: -1
     Rectangle {
         id: _rectChessBoard

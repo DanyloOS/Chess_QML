@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <algorithm>
 
+#include "fen.h"
 
 ChessBoardModel::ChessBoardModel(ChessBoard board, QObject *parent)
     : QAbstractListModel(parent), m_board(std::move(board))
@@ -15,7 +16,7 @@ ChessBoardModel::ChessBoardModel(ChessBoard board, QObject *parent)
     connect(this, &ChessBoardModel::moveApplied, this, &ChessBoardModel::toggleCurrentPlayer);
     connect(this, &ChessBoardModel::moveApplied, this, &ChessBoardModel::updatePiecesOnBoard);
     connect(this, &ChessBoardModel::blackToMove, this, &ChessBoardModel::askForMove);
-//    connect(this, &ChessBoardModel::whiteToMove, this, &ChessBoardModel::askForMove);
+    connect(this, &ChessBoardModel::whiteToMove, this, &ChessBoardModel::askForMove);
     connect(&m_engine, &UciEngine::bestMoveFound, this, &ChessBoardModel::applyMove);
     connect(&m_engine, &UciEngine::legalMovesFound, this, &ChessBoardModel::saveLegalMoves);
     connect(this, &ChessBoardModel::gameOver, this, &ChessBoardModel::processGameOver);
@@ -165,7 +166,8 @@ void ChessBoardModel::applyMove(QString move)
 
     m_board.at(oldY, oldX).setPiece(ChessPiece());
     qDebug() << "applyMove() move = " << move << "   "
-        << oldX << ' ' << oldY << ' ' << newX << ' ' << newY;    endResetModel();
+        << oldX << ' ' << oldY << ' ' << newX << ' ' << newY;
+    endResetModel();
     m_movesHistory += move + " ";
     emit moveApplied();
 }
@@ -220,7 +222,7 @@ void ChessBoardModel::processGameOver(PieceColor_e p)
 
     disconnect(&m_engine, &UciEngine::legalMovesFound, this, &ChessBoardModel::saveLegalMoves);
     m_legalMoves.clear();
-    m_winner = p;
+    m_winner = PieceColor_to_int(p);
     emit winnerChanged(m_winner);
 }
 
@@ -286,6 +288,29 @@ void ChessBoardModel::updatePiecesOnBoard()
      */
 }
 
+void ChessBoardModel::resetModel()
+{
+//    connect(this, &ChessBoardModel::readyToMove, this, &ChessBoardModel::applyMove);
+//    connect(this, &ChessBoardModel::piecesChanged, this, &ChessBoardModel::updatePiecesOnBoard);
+//    connect(this, &ChessBoardModel::moveApplied, this, &ChessBoardModel::toggleCurrentPlayer);
+//    connect(this, &ChessBoardModel::moveApplied, this, &ChessBoardModel::updatePiecesOnBoard);
+//    connect(this, &ChessBoardModel::blackToMove, this, &ChessBoardModel::askForMove);
+////    connect(this, &ChessBoardModel::whiteToMove, this, &ChessBoardModel::askForMove);
+//    connect(&m_engine, &UciEngine::bestMoveFound, this, &ChessBoardModel::applyMove);
+//    connect(&m_engine, &UciEngine::legalMovesFound, this, &ChessBoardModel::saveLegalMoves);
+//    connect(this, &ChessBoardModel::gameOver, this, &ChessBoardModel::processGameOver);
+//    QThread::msleep(100);
+    connect(&m_engine, &UciEngine::legalMovesFound, this, &ChessBoardModel::saveLegalMoves);
+    m_board = FEN::fromFENToBoard(CHESS_DEFAULT_FEN);
+    m_currentPlayer = PieceColor_e::White;
+//    m_engine = UciEngine();
+    m_movesHistory.clear();
+    m_legalMoves.clear();
+    m_piecesOnBoard.clear();
+    m_winner = PieceColor_to_int(PieceColor_e::None);
+    findLegalMoves();
+    endResetModel();
+}
 
 //void whiteToMove()
 //{

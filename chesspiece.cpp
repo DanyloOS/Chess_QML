@@ -27,3 +27,8 @@ QString ChessPiece::typeToStr(PieceType_e type)
 
     return ptostr[type];
 }
+
+int PieceColor_to_int(PieceColor_e color)
+{
+    return static_cast<int>(color);
+}

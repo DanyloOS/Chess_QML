@@ -12,7 +12,7 @@
 class ChessBoardModel : public QAbstractListModel
 {
     Q_OBJECT
-    Q_PROPERTY(PieceColor_e winner MEMBER m_winner NOTIFY winnerChanged)
+    Q_PROPERTY(int winner MEMBER m_winner NOTIFY winnerChanged)
 public:
     enum ChessBoardRoles {
         CellColorRole = Qt::UserRole + CHESSBOARD_ROLE_OFFSET,
@@ -35,6 +35,7 @@ public:
     int rowCount(const QModelIndex & parent = QModelIndex()) const override;
     QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const override;
     Q_INVOKABLE void playerMakesMove(int oldY, int oldX, int newY, int newX);
+    Q_INVOKABLE void resetModel();
 
 protected:
     QHash <int, QByteArray> roleNames() const override;
@@ -46,7 +47,7 @@ private:
     QString m_movesHistory;
     QList <QString> m_legalMoves;
     QList <ChessPiece> m_piecesOnBoard;
-    PieceColor_e m_winner = PieceColor_e::None;
+    int m_winner = PieceColor_to_int(PieceColor_e::None);
 
 private slots:
     void applyMove(QString move);
@@ -68,7 +69,7 @@ signals:
     void blackToMove();
     void gameOver(PieceColor_e);
     void piecesChanged();
-    void winnerChanged(PieceColor_e);
+    void winnerChanged(int);
 };
 
 #endif // CHESSBOARDMODEL_H

@@ -52,11 +52,11 @@ Rectangle {
         yoffset: _gameBoard.width - (_gameBoard.width - _gameBoard._chessBoardSize + _cellCoordinatesMargins) / 2
     }
 
-    Connections {
-        target: chessBoardModel
-        function onWinnerChanged(pieceColor) {
-            console.log("Hello")
-            console.log(pieceColor = pieceColor_e)
-        }
-    }
+//    Connections {
+//        target: chessBoardModel
+//        function onWinnerChanged(pieceColor) {
+//            console.log("Hello")
+//            console.log(pieceColor)
+//        }
+//    }
 }

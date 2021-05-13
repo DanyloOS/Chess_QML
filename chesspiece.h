@@ -22,6 +22,8 @@ enum class PieceColor_e {
     Black
 };
 
+int PieceColor_to_int(PieceColor_e color);
+
 //class PieceColor_e : public QObject {
 //public:
 //    PieceColor_e() : QObject() {}

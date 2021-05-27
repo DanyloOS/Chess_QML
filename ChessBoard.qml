@@ -74,24 +74,28 @@ Rectangle {
                 onPressed: {
                     _piece.z++
                     _mouseAreaRect.visible = (pieceType === -1) ? false : true
-                    _mouseAreaRect.opacityCoef = 0.5
+                    _mouseAreaRect.opacityCoef = 0.3
                     console.log("cellSize:", cellSize,
                                 "x:", _piece.x,
                                 "xc:", _piece.x + _piece.width / 2,
                                 "y:", _piece.y,
                                 "yc:", _piece.y + _piece.width / 2,
                                 "pieceType:", pieceType);
+                    _piece.width = _piece.width * 1.3
+                    _piece.height = _piece.height * 1.3
                 }
 
                 onReleased: {
                     _piece.z--
-                    _mouseAreaRect.opacityCoef = 0.5
+                    _mouseAreaRect.opacityCoef = 0
                     var xCenter = _piece.x + cellSize / 2
                     var yCenter = _piece.y + cellSize / 2
                     _piece.coordX = parseInt(xCenter / cellSize)
                     _piece.coordX = _piece._coordX
                     _piece.coordY = parseInt(yCenter / cellSize)
                     _piece.coordY = _piece._coordY
+                    _piece.width = _piece.width / 1.3
+                    _piece.height = _piece.height / 1.3
 
                     console.log("cellSize:", cellSize,
                                 "x:", _piece.x,
@@ -119,7 +123,6 @@ Rectangle {
                     radius: width / 2
                     visible: false
                 }
-
             }
         }
     }

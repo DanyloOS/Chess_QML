@@ -6,7 +6,8 @@
 #include "uciengine.h"
 
 #define CHESSBOARD_ROLE_OFFSET 100
-#define ENGINE_PATH "/home/danylos/Coding/Stockfish/src/stockfish"
+//#define ENGINE_PATH "/home/danylos/Coding/Stockfish/src/stockfish"
+#define ENGINE_PATH "chessEngine"
 
 
 class ChessBoardModel : public QAbstractListModel

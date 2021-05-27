@@ -45,8 +45,8 @@ public slots:
     void findMove(const QString previousMoves)
     {
         isLookingForTheBestMove = true;
-        sendCommand("position startpos moves " + previousMoves + "\ngo depth 12\n");
-        QThread::msleep(300);
+        sendCommand("position startpos moves " + previousMoves + "\ngo\n");
+        QThread::msleep(200);
 //        sendCommand("stop\n");
 //        QThread::msleep(100);
     }

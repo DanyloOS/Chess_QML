@@ -11,16 +11,16 @@ ChessBoardModel::ChessBoardModel(ChessBoard board, QObject *parent)
 {
     m_engine.startEngine(ENGINE_PATH);//, QStringList({"uci", "ucinewgame", "isready"}));
 //    connect(this, &ChessBoardModel::initiateGame, this, &ChessBoardModel::findLegalMoves);
-    connect(this, &ChessBoardModel::readyToMove, this, &ChessBoardModel::applyMove);
-    connect(this, &ChessBoardModel::piecesChanged, this, &ChessBoardModel::updatePiecesOnBoard);
-    connect(this, &ChessBoardModel::moveApplied, this, &ChessBoardModel::toggleCurrentPlayer);
-    connect(this, &ChessBoardModel::moveApplied, this, &ChessBoardModel::updatePiecesOnBoard);
-    connect(this, &ChessBoardModel::blackToMove, this, &ChessBoardModel::askForMove);
-//    connect(this, &ChessBoardModel::whiteToMove, this, &ChessBoardModel::askForMove);
-    connect(&m_engine, &UciEngine::bestMoveFound, this, &ChessBoardModel::applyMove);
-    connect(&m_engine, &UciEngine::legalMovesFound, this, &ChessBoardModel::saveLegalMoves);
-    connect(this, &ChessBoardModel::gameOver, this, &ChessBoardModel::processGameOver);
-        QThread::msleep(100);
+    connect(this, &ChessBoardModel::readyToMove, this, &ChessBoardModel::applyMove, Qt::UniqueConnection);
+    connect(this, &ChessBoardModel::piecesChanged, this, &ChessBoardModel::updatePiecesOnBoard, Qt::UniqueConnection);
+    connect(this, &ChessBoardModel::moveApplied, this, &ChessBoardModel::toggleCurrentPlayer, Qt::UniqueConnection);
+    connect(this, &ChessBoardModel::moveApplied, this, &ChessBoardModel::updatePiecesOnBoard, Qt::UniqueConnection);
+    connect(this, &ChessBoardModel::blackToMove, this, &ChessBoardModel::askForMove, Qt::UniqueConnection);
+    connect(this, &ChessBoardModel::whiteToMove, this, &ChessBoardModel::askForMove, Qt::UniqueConnection);
+    connect(&m_engine, &UciEngine::bestMoveFound, this, &ChessBoardModel::applyMove, Qt::UniqueConnection);
+    connect(&m_engine, &UciEngine::legalMovesFound, this, &ChessBoardModel::saveLegalMoves, Qt::UniqueConnection);
+    connect(this, &ChessBoardModel::gameOver, this, &ChessBoardModel::processGameOver, Qt::UniqueConnection);
+    QThread::msleep(100);
     findLegalMoves();
 }
 
@@ -258,6 +258,7 @@ void ChessBoardModel::updatePiecesOnBoard()
     if (std::find_if(itBegin, itEnd, [](const ChessPiece& p)
                      { return p.type() == PieceType_e::Pawn; }) != itEnd)
     {
+        qDebug() << "info: pawns are still in game";
         return;
     }
 
@@ -271,7 +272,7 @@ void ChessBoardModel::updatePiecesOnBoard()
 
     qDebug() << "updatePiecesOnBoard : " << whitePieces << " vs " << blackPieces;
 
-    if (whitePieces < blackPieces)
+    if (whitePieces > blackPieces)
         std::swap(whitePieces, blackPieces);
 
     if (whitePieces == "k" &&
